@@ -79,11 +79,19 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
 
     @EventHandler
     public void onMobKill(EntityDeathEvent event) {
+
+        String headItemName = ChatColor.WHITE + event.getEntity().getName() + " Head";
+
         if (vanilla_mob_heads.containsKey(event.getEntityType())) {
-            event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), new ItemStack(vanilla_mob_heads.get(event.getEntityType())));
+            ItemStack itemToDrop = new ItemStack(vanilla_mob_heads.get(event.getEntityType()));
+            ItemMeta itemToDropMeta = itemToDrop.getItemMeta();
+            itemToDropMeta.setDisplayName(headItemName);
+            itemToDrop.setItemMeta(itemToDropMeta);
+            event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), itemToDrop);
         } else if(custom_mob_heads.containsKey(event.getEntityType())) {
-            dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), ChatColor.WHITE + event.getEntity().getName() + " Head");
+            dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName);
         }
+
     }
 
     @Override
