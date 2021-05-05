@@ -1,4 +1,4 @@
-package me.lordburtz.dropheads;
+package me.lordburtz.dropheads.util;
 
 
 import com.mojang.authlib.GameProfile;
