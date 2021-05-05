@@ -29,8 +29,6 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         put(EntityType.CREEPER, Material.CREEPER_HEAD);
         put(EntityType.SKELETON, Material.SKELETON_SKULL);
         put(EntityType.WITHER_SKELETON, Material.WITHER_SKELETON_SKULL);
-        put(EntityType.WITHER, Material.WITHER_SKELETON_SKULL);
-        put(EntityType.ENDER_DRAGON, Material.DRAGON_HEAD);
     }};
 
     public Map<EntityType, String> custom_mob_heads = new HashMap<EntityType, String>() {{
