@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public final class DropHeads extends JavaPlugin implements Listener, CommandExecutor {
 
     public static Logger logger;
-    public static String prefix = "[Heads] ";
+    public static String prefix = "[DropHeads] ";
 
     public Map<EntityType, Material> vanilla_mob_heads = new HashMap<EntityType, Material>() {{
         put(EntityType.ZOMBIE, Material.ZOMBIE_HEAD);
