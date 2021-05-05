@@ -53,6 +53,8 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         put(EntityType.WITCH, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODllOGI1ZjE1YTliMjlhMWUzODljOTUyMThmZDM3OTVmMzI4NzJlNWFlZTk0NjRhNzY0OTVjNTI3ZDIyNDUifX19");
     }};
 
+    //custom heads from this link: https://minecraft-heads.com/custom-heads
+
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this);
