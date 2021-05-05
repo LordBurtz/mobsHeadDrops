@@ -1,1 +1,1 @@
-hplugin to drop mob heads on kill
+plugin to drop mob heads on kill
