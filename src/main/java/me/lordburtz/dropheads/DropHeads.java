@@ -1,6 +1,7 @@
 package me.lordburtz.dropheads;
 
 import me.lordburtz.dropheads.util.SkullCreator;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.EntityType;
@@ -9,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -30,6 +32,8 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         logger.log(Level.INFO, prefix + message);
     }
 
+    private static Economy econ = null;
+
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -37,13 +41,39 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         logger = Bukkit.getLogger();
         this.saveDefaultConfig();
         loadConfig();
+
+
+
+        if (!setupEconomy() ) {
+            log(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+
         log("Drop Heads loaded");
+    }
+
+    public static Economy getEconomy() {
+        return econ;
     }
 
     @Override
     public void onDisable() {
         vanilla_mob_heads = null;
         custom_mob_heads = null;
+    }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
     }
 
     public void loadConfig() {
@@ -99,14 +129,15 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         ItemStack item = SkullCreator.itemFromBase64(skinBase64);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(itemName);
+        List<String> lore;
 
         if (meta.hasLore()) {
-            List<String> lore = meta.getLore();
+            lore = meta.getLore();
             lore.add(invisString(mobname));
         } else {
-            List<String> lore = new ArrayList<String>();
+            lore = new ArrayList<String>();
+            lore.add(invisString(mobname));
         }
-        //WARNING: THE LORE IS HERE SET to prevenet null pointer exceptions; will add check for lore later
         meta.setLore(lore);
         item.setItemMeta(meta);
         world.dropItem(location, item);
