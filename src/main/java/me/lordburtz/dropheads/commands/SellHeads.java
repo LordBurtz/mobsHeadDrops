@@ -8,6 +8,8 @@ import org.bukkit.Warning;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -36,6 +38,7 @@ public class SellHeads implements CommandExecutor {
         //TODO: make this work; removed till working
         //if (!stack.getItemMeta().getLore().contains(DropHeads.invisString("DropHeads"))) return true;
         commandSender.sendMessage("working");
+        commandSender.sendMessage(EntityType.BAT.name());
         //have to add config support but i really gtg now
         econ.depositPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), 10);
         return true;
