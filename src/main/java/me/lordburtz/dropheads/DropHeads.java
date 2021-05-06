@@ -1,5 +1,6 @@
 package me.lordburtz.dropheads;
 
+import me.lordburtz.dropheads.commands.SellHeads;
 import me.lordburtz.dropheads.util.SkullCreator;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
@@ -42,14 +43,13 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         this.saveDefaultConfig();
         loadConfig();
 
-
-
         if (!setupEconomy() ) {
             log(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
+        new SellHeads(this, econ);
 
         log("Drop Heads loaded");
     }
@@ -138,6 +138,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
             lore = new ArrayList<String>();
             lore.add(invisString(mobname));
         }
+        lore.add(invisString("DropHeads"));
         meta.setLore(lore);
         item.setItemMeta(meta);
         world.dropItem(location, item);
@@ -145,7 +146,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
 
     public static String invisString(String s) {
         String hidden = "";
-        for (char c : s.toCharArray()) hidden += ChatColor.COLOR_CHAR+""+c;
+        for (char c : s.toCharArray()) hidden += ChatColor.COLOR_CHAR + "" + c;
         return hidden;
     }
 
