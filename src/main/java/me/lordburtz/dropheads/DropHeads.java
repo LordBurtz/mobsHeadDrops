@@ -99,8 +99,13 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         ItemStack item = SkullCreator.itemFromBase64(skinBase64);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(itemName);
-        List<String> lore = new ArrayList<String>();
-        lore.add(invisString(mobname));
+
+        if (meta.hasLore()) {
+            List<String> lore = meta.getLore();
+            lore.add(invisString(mobname));
+        } else {
+            List<String> lore = new ArrayList<String>();
+        }
         //WARNING: THE LORE IS HERE SET to prevenet null pointer exceptions; will add check for lore later
         meta.setLore(lore);
         item.setItemMeta(meta);
