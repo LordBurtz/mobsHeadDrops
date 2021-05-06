@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.List;
 
 public final class DropHeads extends JavaPlugin implements Listener, CommandExecutor {
 
@@ -88,7 +89,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
             itemToDrop.setItemMeta(itemToDropMeta);
             event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), itemToDrop);
         } else if (custom_mob_heads.containsKey(event.getEntityType())) {
-            dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName, event.getEntityType());
+            dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName, event.getEntityType().getName());
         }
 
     }
@@ -98,10 +99,16 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(itemName);
         List<String> lore = meta.getLore();
-        lore.add(mobtype);
+        lore.add(invisString(mobtype));
         meta.setLore(lore);
         item.setItemMeta(meta);
         world.dropItem(location, item);
+    }
+
+    public static String invisString(String s) {
+        String hidden = "";
+        for (char c : s.toCharArray()) hidden += ChatColor.COLOR_CHAR+""+c;
+        return hidden;
     }
 
     //@Override
