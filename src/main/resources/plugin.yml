@@ -5,7 +5,3 @@ api-version: 1.16
 authors: [ LordBurtz ]
 description: mobs drop Heads on kill
 website: https://github.com/LordBurtz
-
-commands:
-  test:
-    aliases: []

@@ -88,15 +88,18 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
             itemToDrop.setItemMeta(itemToDropMeta);
             event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), itemToDrop);
         } else if (custom_mob_heads.containsKey(event.getEntityType())) {
-            dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName);
+            dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName, event.getEntityType());
         }
 
     }
 
-    public static void dropCustomSkull(World world, Location location, String skinBase64, String itemName) {
+    public static void dropCustomSkull(World world, Location location, String skinBase64, String itemName, String mobtype) {
         ItemStack item = SkullCreator.itemFromBase64(skinBase64);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(itemName);
+        List<String> lore = meta.getLore();
+        lore.add(mobtype);
+        meta.setLore(lore);
         item.setItemMeta(meta);
         world.dropItem(location, item);
     }
