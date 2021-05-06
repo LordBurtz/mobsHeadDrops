@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
+import java.util.ArrayList;
 
 public final class DropHeads extends JavaPlugin implements Listener, CommandExecutor {
 
@@ -89,17 +90,18 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
             itemToDrop.setItemMeta(itemToDropMeta);
             event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), itemToDrop);
         } else if (custom_mob_heads.containsKey(event.getEntityType())) {
-            dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName, event.getEntityType().getName());
+            dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName, event.getEntity().getName());
         }
 
     }
 
-    public static void dropCustomSkull(World world, Location location, String skinBase64, String itemName, String mobtype) {
+    public static void dropCustomSkull(World world, Location location, String skinBase64, String itemName, String mobname) {
         ItemStack item = SkullCreator.itemFromBase64(skinBase64);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(itemName);
-        List<String> lore = meta.getLore();
-        lore.add(invisString(mobtype));
+        List<String> lore = new ArrayList<String>();
+        lore.add(invisString(mobname));
+        //WARNING: THE LORE IS HERE SET to prevenet null pointer exceptions; will add check for lore later
         meta.setLore(lore);
         item.setItemMeta(meta);
         world.dropItem(location, item);
