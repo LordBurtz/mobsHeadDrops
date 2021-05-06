@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,6 +28,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
     public Map<EntityType, Material> vanilla_mob_heads;
     public Map<EntityType, String> custom_mob_heads;
 
+    public static DropHeads plugin;
     public static Logger logger;
     public static String prefix = "[DropHeads] ";
 
@@ -38,6 +40,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
 
     @Override
     public void onEnable() {
+        plugin = this;
         Bukkit.getPluginManager().registerEvents(this, this);
         //this.getCommand("test").setExecutor(this);
         logger = Bukkit.getLogger();
@@ -126,6 +129,10 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
 
     }
 
+    public NamespacedKey getKey() {
+        return new NamespacedKey(this, "mobtype");
+    }
+
     public static void dropCustomSkull(World world, Location location, String skinBase64, String itemName, String mobname) {
         ItemStack item = SkullCreator.itemFromBase64(skinBase64);
         ItemMeta meta = item.getItemMeta();
@@ -135,10 +142,16 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         if (meta.hasLore()) {
             lore = meta.getLore();
             lore.add(invisString(mobname));
+            //lore.add(mobname);
         } else {
             lore = new ArrayList<String>();
-            lore.add(invisString(mobname));
+            lore.add(mobname);
         }
+
+        //now using PERSITENT DATA CONTAINERS
+        NamespacedKey key = new NamespacedKey(plugin, "mobytpe");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, mobname);
+
         lore.add(invisString("DropHeads"));
         meta.setLore(lore);
         item.setItemMeta(meta);
