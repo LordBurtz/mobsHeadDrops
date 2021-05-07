@@ -142,14 +142,13 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(itemName);
 
-        //this lore can safely be removed
         List<String> lore;
         if (meta.hasLore()) {
             lore = meta.getLore();
-            lore.add(invisString(mobname));
+            lore.add("MobHead");
         } else {
-            lore = new ArrayList<String>();
-            lore.add(invisString(mobname));
+            lore = new ArrayList<>();
+            lore.add("MobHead");
         }
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, type);
         meta.setLore(lore);
