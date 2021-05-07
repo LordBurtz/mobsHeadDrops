@@ -36,6 +36,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
     public static void log(String message) {
         logger.log(Level.INFO, prefix + message);
     }
+    public static void log(String msg, boolean bool) {logger.log(Level.SEVERE, msg);}
 
     private static Economy econ = null;
 
@@ -161,20 +162,4 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         for (char c : s.toCharArray()) hidden += ChatColor.COLOR_CHAR + "" + c;
         return hidden;
     }
-
-    //@Override
-    //public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    //    ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-    //
-    //    String base64 = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L" +
-    //            "3RleHR1cmUvNTIyODRlMTMyYmZkNjU5YmM2YWRhNDk3YzRmYTMwOTRjZDkzMjMxYTZiNTA1YTEyY2U3Y2Q1MTM1YmE4ZmY5MyJ9fX0=";
-    //
-    //    String texture = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGNmMWIzYjNmNTM5ZDJmNjNjMTcyZTk0Y2FjZmFhMzkxZThiMzg1Y2RkNjMzZjNiOTkxYzc0ZTQ0YjI4In19fQ";
-    //
-    //    String test_texture3 = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjc4ZWYyZTRjZjJjNDFhMmQxNGJmZGU5Y2FmZjEwMjE5ZjViMWJmNWIzNWE0OWViNTFjNjQ2Nzg4MmNiNWYwIn19fQ=";
-    //
-    //    ((Player) sender).getInventory().addItem(SkullCreator.itemFromBase64(test_texture3));
-    //    return true;
-    //}
-
 }

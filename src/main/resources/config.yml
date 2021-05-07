@@ -3,6 +3,9 @@
 # Only Drop Head when Killed By Player
 mustBePlayerKill: false
 
+#set here your custom message
+help-msg: "kill mobs to get heads.. sell your heads with /sell-heads"
+
 # Enable/Disable Drops of Non-Custom Heads from the Vanilla Game
 # Note: This in no way affects vanilla methods of acquiring heads, just whether this plugin will drop them.
 enableDropCreeper: true

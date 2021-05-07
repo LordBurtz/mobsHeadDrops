@@ -30,6 +30,7 @@ public class SellHeads implements CommandExecutor, TabCompleter {
     }
 
     public static void log(String msg) {DropHeads.log(msg);}
+    public static void log(boolean bool, String msg) {DropHeads.log(msg, bool);}
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
@@ -37,6 +38,20 @@ public class SellHeads implements CommandExecutor, TabCompleter {
             commandSender.sendMessage(ChatColor.RED+ "console is not supported");
             return true;
         }
+
+        if (args.length > 0) {
+            if (args[0].equals("help")) {
+                String msg = plugin.getConfig().getString("help-msg");
+                if (msg == null) {
+                    log(true, ChatColor.RED + "help-msg not set in config");
+                    commandSender.sendMessage("kill mobs to get heads.. sell your heads with /sell-heads");
+                    return true;
+                }
+                commandSender.sendMessage(msg);
+                return true;
+            }
+        }
+
         Player player = ((Player) commandSender).getPlayer();
         ItemStack stack = player.getInventory().getItemInMainHand();
 
@@ -72,8 +87,13 @@ public class SellHeads implements CommandExecutor, TabCompleter {
         } else {
             switch (args[0]) {
                 case "help":
-                    //TODO: add help msg via config
-                    player.sendMessage("custom help message");
+                    String msg = plugin.getConfig().getString("help-msg");
+                    if (msg == null) {
+                        log(true, ChatColor.RED + "help-msg not set in config");
+                        commandSender.sendMessage("kill mobs to get heads.. sell your heads with /sell-heads");
+                        return true;
+                    }
+                    commandSender.sendMessage(msg);
                     break;
                 case "all":
                     double final_amount = payment * stack.getAmount();
