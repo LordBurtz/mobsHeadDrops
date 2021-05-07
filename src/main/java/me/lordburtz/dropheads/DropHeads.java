@@ -31,6 +31,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
     public static DropHeads plugin;
     public static Logger logger;
     public static String prefix = "[DropHeads] ";
+    public static NamespacedKey key;
 
     public static void log(String message) {
         logger.log(Level.INFO, prefix + message);
@@ -54,6 +55,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         }
 
         new SellHeads(this, econ);
+        key = new NamespacedKey(plugin, "mobtype");
 
         log("Drop Heads loaded");
     }
@@ -99,6 +101,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
             customHeadMapIn.put(key, getConfig().getString("customHeadMap." + key));
         }
         for(String key : customHeadMapIn.keySet()) {
+            //use valueOf as fromeName is deprecated
             EntityType type = EntityType.fromName(key);
             if(type != null) {
                 log("Loaded custom head for \"" + key + "\"");
@@ -124,7 +127,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
             itemToDrop.setItemMeta(itemToDropMeta);
             event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), itemToDrop);
         } else if (custom_mob_heads.containsKey(event.getEntityType())) {
-            dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName, event.getEntity().getName());
+            dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName, event.getEntity().getName(), event.getEntityType().name());
         }
 
     }
@@ -133,26 +136,21 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         return new NamespacedKey(this, "mobtype");
     }
 
-    public static void dropCustomSkull(World world, Location location, String skinBase64, String itemName, String mobname) {
+    public static void dropCustomSkull(World world, Location location, String skinBase64, String itemName, String mobname, String type) {
         ItemStack item = SkullCreator.itemFromBase64(skinBase64);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(itemName);
-        List<String> lore;
 
+        //this lore can safely be removed
+        List<String> lore;
         if (meta.hasLore()) {
             lore = meta.getLore();
             lore.add(invisString(mobname));
-            //lore.add(mobname);
         } else {
             lore = new ArrayList<String>();
-            lore.add(mobname);
+            lore.add(invisString(mobname));
         }
-
-        //now using PERSITENT DATA CONTAINERS
-        NamespacedKey key = new NamespacedKey(plugin, "mobytpe");
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, mobname);
-
-        lore.add(invisString("DropHeads"));
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, type);
         meta.setLore(lore);
         item.setItemMeta(meta);
         world.dropItem(location, item);
