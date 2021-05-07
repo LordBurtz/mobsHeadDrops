@@ -7,15 +7,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static me.lordburtz.dropheads.DropHeads.key;
 
@@ -23,10 +19,14 @@ public class SellHeads implements CommandExecutor, TabCompleter {
     private DropHeads plugin;
     private Economy econ;
 
+    public static final List<String> COMMANDS = new ArrayList<>();
     public SellHeads(DropHeads plugin, Economy economy) {
+        createCommands();
+
         this.plugin = plugin;
         this.econ = economy;
         plugin.getCommand("sell-heads").setExecutor(this);
+        plugin.getCommand("sell-heads").setTabCompleter(this);
     }
 
     public static void log(String msg) {DropHeads.log(msg);}
@@ -67,7 +67,8 @@ public class SellHeads implements CommandExecutor, TabCompleter {
             double final_amount = payment * stack.getAmount();
             player.getInventory().remove(stack);
             econ.depositPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), final_amount);
-            player.sendMessage(ChatColor.GOLD + String.format("%f have been added to your balance", final_amount));
+            player.sendMessage(ChatColor.GOLD + String.format("%.2f have been added to your balance", final_amount));
+            return true;
         } else {
             switch (args[0]) {
                 case "help":
@@ -78,26 +79,35 @@ public class SellHeads implements CommandExecutor, TabCompleter {
                     double final_amount = payment * stack.getAmount();
                     player.getInventory().remove(stack);
                     econ.depositPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), final_amount);
-                    player.sendMessage(ChatColor.GOLD + String.format("%f have been added to your balance", final_amount));
+                    player.sendMessage(ChatColor.GOLD + String.format("%.2f have been added to your balance", final_amount));
                     break;
                 case "single":
                     econ.depositPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), payment);
                     stack.setAmount(stack.getAmount() -1);
-                    player.sendMessage(ChatColor.GOLD + String.format("%f have been added to your balance", payment));
+                    player.sendMessage(ChatColor.GOLD + String.format("%.2f have been added to your balance", payment));
                     break;
             }
             return true;
         }
+    }
 
-
-        commandSender.sendMessage(String.valueOf(plugin.getConfig().getInt("payment4Head." + mobname)));
-        econ.depositPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), payment);
-        return true;
+    public final void createCommands() {
+        COMMANDS.add("help");
+        COMMANDS.add("single");
+        COMMANDS.add("all");
     }
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
-        return null;
+        List<String> completions = new ArrayList<>();
+
+        if (strings.length == 1) {
+            for (String a : COMMANDS) {
+                if (a.toLowerCase().startsWith(strings[0].toLowerCase())) completions.add(a);
+            }
+            return completions;
+        }
+        return COMMANDS;
     }
 }
 
