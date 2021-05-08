@@ -54,6 +54,5 @@ public class SpawnerPlace implements Listener {
         } else {
             event.setCancelled(true);
         }
-
     }
 }
