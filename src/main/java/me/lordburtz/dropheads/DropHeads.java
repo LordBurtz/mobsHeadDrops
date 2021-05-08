@@ -4,7 +4,6 @@ import me.lordburtz.dropheads.commands.SellHeads;
 import me.lordburtz.dropheads.util.SkullCreator;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,7 +23,7 @@ import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
-public final class DropHeads extends JavaPlugin implements Listener, CommandExecutor {
+public final class DropHeads extends JavaPlugin implements Listener {
 
     public Map<EntityType, Material> vanilla_mob_heads;
     public Map<EntityType, String> custom_mob_heads;
@@ -34,6 +33,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
     public static String prefix = "[DropHeads] ";
     public static NamespacedKey key_mobType;
     public static NamespacedKey key_playerXP;
+    public static Map<>
 
     public static void log(String message) {
         logger.log(Level.INFO, prefix + message);
@@ -46,7 +46,6 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
     public void onEnable() {
         plugin = this;
         Bukkit.getPluginManager().registerEvents(this, this);
-        //this.getCommand("test").setExecutor(this);
         logger = Bukkit.getLogger();
         this.saveDefaultConfig();
         loadConfig();
