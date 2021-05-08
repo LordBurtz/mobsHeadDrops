@@ -13,7 +13,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
-import static me.lordburtz.dropheads.DropHeads.key;
+import static me.lordburtz.dropheads.DropHeads.key_mobType;
 
 public class SellHeads implements CommandExecutor, TabCompleter {
     private DropHeads plugin;
@@ -41,13 +41,7 @@ public class SellHeads implements CommandExecutor, TabCompleter {
 
         if (args.length > 0) {
             if (args[0].equals("help")) {
-                String msg = plugin.getConfig().getString("help-msg");
-                if (msg == null) {
-                    log(true, ChatColor.RED + "help-msg not set in config");
-                    commandSender.sendMessage("kill mobs to get heads.. sell your heads with /sell-heads");
-                    return true;
-                }
-                commandSender.sendMessage(msg);
+                helpMSG(commandSender);
                 return true;
             }
         }
@@ -69,7 +63,7 @@ public class SellHeads implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        String mobname = stack.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
+        String mobname = stack.getItemMeta().getPersistentDataContainer().get(key_mobType, PersistentDataType.STRING);
         double payment = plugin.getConfig().getDouble("payment4Head." + mobname);
 
         if (mobname == null || payment == 0) {
@@ -87,13 +81,7 @@ public class SellHeads implements CommandExecutor, TabCompleter {
         } else {
             switch (args[0]) {
                 case "help":
-                    String msg = plugin.getConfig().getString("help-msg");
-                    if (msg == null) {
-                        log(true, ChatColor.RED + "help-msg not set in config");
-                        commandSender.sendMessage("kill mobs to get heads.. sell your heads with /sell-heads");
-                        return true;
-                    }
-                    commandSender.sendMessage(msg);
+                    helpMSG(commandSender);
                     break;
                 case "all":
                     double final_amount = payment * stack.getAmount();
@@ -109,6 +97,16 @@ public class SellHeads implements CommandExecutor, TabCompleter {
             }
             return true;
         }
+    }
+
+    public void helpMSG(CommandSender commandSender) {
+        String msg = plugin.getConfig().getString("help-msg");
+        if (msg == null) {
+            log(true, ChatColor.RED + "help-msg not set in config");
+            commandSender.sendMessage("kill mobs to get heads.. sell your heads with /sell-heads");
+            return;
+        }
+        commandSender.sendMessage(msg);
     }
 
     public final void createCommands() {

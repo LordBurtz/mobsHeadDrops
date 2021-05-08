@@ -5,13 +5,14 @@ import me.lordburtz.dropheads.util.SkullCreator;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,7 +32,8 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
     public static DropHeads plugin;
     public static Logger logger;
     public static String prefix = "[DropHeads] ";
-    public static NamespacedKey key;
+    public static NamespacedKey key_mobType;
+    public static NamespacedKey key_playerXP;
 
     public static void log(String message) {
         logger.log(Level.INFO, prefix + message);
@@ -56,7 +58,8 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
         }
 
         new SellHeads(this, econ);
-        key = new NamespacedKey(plugin, "mobtype");
+        key_mobType = new NamespacedKey(plugin, "mobtype");
+        key_playerXP = new NamespacedKey(plugin, "mobKillXp");
 
         log("Drop Heads loaded");
     }
@@ -116,10 +119,11 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
 
     @EventHandler
     public void onMobKill(EntityDeathEvent event) {
+        int xp;
 
         if(getConfig().getBoolean("mustBePlayerKill") && event.getEntity().getKiller() == null) return;
 
-        String headItemName = ChatColor.WHITE + event.getEntity().getName() + " Head";
+        String headItemName = ChatColor.WHITE + event.getEntityType().name() + " Head";
 
         if (vanilla_mob_heads.containsKey(event.getEntityType())) {
             ItemStack itemToDrop = new ItemStack(vanilla_mob_heads.get(event.getEntityType()));
@@ -127,10 +131,23 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
             itemToDropMeta.setDisplayName(headItemName);
             itemToDrop.setItemMeta(itemToDropMeta);
             event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), itemToDrop);
+            xp =getXP(event.getEntityType().name());
         } else if (custom_mob_heads.containsKey(event.getEntityType())) {
             dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName, event.getEntity().getName(), event.getEntityType().name());
+            xp = getXP(event.getEntityType().name());
+            PersistentDataContainer container = event.getEntity().getKiller().getPersistentDataContainer();
+            container.set(key_playerXP, PersistentDataType.INTEGER, container.get(key_playerXP, PersistentDataType.INTEGER) + xp);
         }
+    }
 
+    @EventHandler
+    public void onPlayerFirstJoin(PlayerJoinEvent event) {
+        if (event.getPlayer().hasPlayedBefore()) return;
+        event.getPlayer().getPersistentDataContainer().set(key_playerXP, PersistentDataType.INTEGER, 0);
+    }
+
+    public int getXP(String mob) {
+        return getConfig().getInt("xp4kill." + mob);
     }
 
     public NamespacedKey getKey() {
@@ -150,7 +167,7 @@ public final class DropHeads extends JavaPlugin implements Listener, CommandExec
             lore = new ArrayList<>();
             lore.add("MobHead");
         }
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, type);
+        meta.getPersistentDataContainer().set(key_mobType, PersistentDataType.STRING, type);
         meta.setLore(lore);
         item.setItemMeta(meta);
         world.dropItem(location, item);

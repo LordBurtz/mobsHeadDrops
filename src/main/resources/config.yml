@@ -13,6 +13,13 @@ enableDropSkeleton: true
 enableDropWitherSkeleton: true
 enableDropZombie: true
 
+Tiers:
+  Tier1: 10
+  Tier2: 20
+  Tier3: 30
+  Tier4: 40
+  Tier5: 50
+
 # Base64 String Values for Custom Head Skins, defaults mostly from https://minecraft-heads.com/custom-heads
 # If an EntityType is invalid, the entry is ignored. This allows for widened version compatibility with a single plugin jar.
 customHeadMap:
@@ -99,6 +106,150 @@ customHeadMap:
   "zoglin": "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTY3ZTE4NjAyZTAzMDM1YWQ2ODk2N2NlMDkwMjM1ZDg5OTY2NjNmYjllYTQ3NTc4ZDNhN2ViYmM0MmE1Y2NmOSJ9fX0="
 
 payment4Head:
+  BAT: 10
+  BLAZE: 10
+  CAVE_SPIDER: 10
+  COW: 10
+  CHICKEN: 10
+  DONKEY: 10
+  ELDER_GUARDIAN: 10
+  ENDERMAN: 10
+  GHAST: 10
+  GIANT: 10
+  GUARDIAN: 10
+  HORSE: 10
+  IRON_GOLEM: 10
+  MAGMA_CUBE: 10
+  MUSHROOM_COW: 10
+  MULE: 10
+  OCELOT: 10
+  PIG: 10
+  RABBIT: 10
+  SHEEP: 10
+  SKELETON_HORSE: 10
+  SLIME: 10
+  SNOW_GOLEM: 10
+  SPIDER: 10
+  SQUID: 10
+  VILLAGER: 10
+  WITCH: 10
+  WOLF: 10
+  ZOMBIE_PIGMAN: 10
+
+  ENDERMITE: 10
+  SHULKER: 10
+
+  HUSK: 10
+  POLAR_BEAR: 10
+  EVOKER: 10
+  LLAMA: 10
+  STRAY: 10
+  VEX: 10
+  VINDICATOR: 10
+  ZOMBIE_HORSE: 10
+  ZOMBIE_VILLAGER: 10
+
+  ILLUSIONER: 10
+  PARROT: 10
+
+  COD: 10
+  DOLPHIN: 10
+  DROWNED: 10
+  PHANTOM: 10
+  PUFFERFISH: 10
+  SALMON: 10
+  TROPICAL_FISH: 10
+  TURTLE: 10
+
+  CAT: 10
+  FOX: 10
+  PANDA: 10
+  PILLAGER: 10
+  RAVAGER: 10
+  TRADER_LLAMA: 10
+  WANDERING_TRADER: 10
+
+  BEE: 10
+
+  HOGLIN: 10
+  PIGLIN: 10
+  PIGLIN_BRUTE: 10
+  STRIDER: 10
+  ZOGLIN: 10
+
+SpawnerTiers:
+  BAT: 1
+  BLAZE: 1
+  CAVE_SPIDER: 1
+  COW: 1
+  CHICKEN: 1
+  DONKEY: 1
+  ELDER_GUARDIAN: 1
+  ENDERMAN: 1
+  GHAST: 1
+  GIANT: 1
+  GUARDIAN: 1
+  HORSE: 1
+  IRON_GOLEM: 1
+  MAGMA_CUBE: 1
+  MUSHROOM_COW: 1
+  MULE: 1
+  OCELOT: 1
+  PIG: 1
+  RABBIT: 1
+  SHEEP: 1
+  SKELETON_HORSE: 1
+  SLIME: 1
+  SNOW_GOLEM: 1
+  SPIDER: 1
+  SQUID: 1
+  VILLAGER: 1
+  WITCH: 1
+  WOLF: 1
+  ZOMBIE_PIGMAN: 1
+
+  ENDERMITE: 2
+  SHULKER: 2
+
+  HUSK: 2
+  POLAR_BEAR: 10
+  EVOKER: 2
+  LLAMA: 2
+  STRAY: 2
+  VEX: 2
+  VINDICATOR: 2
+  ZOMBIE_HORSE: 2
+  ZOMBIE_VILLAGER: 2
+
+  ILLUSIONER: 2
+  PARROT: 3
+
+  COD: 3
+  DOLPHIN: 3
+  DROWNED: 1
+  PHANTOM: 3
+  PUFFERFISH: 3
+  SALMON: 3
+  TROPICAL_FISH: 3
+  TURTLE: 3
+
+  CAT: 3
+  FOX: 4
+  PANDA: 4
+  PILLAGER: 4
+  RAVAGER: 4
+  TRADER_LLAMA: 4
+  WANDERING_TRADER: 4
+
+  BEE: 4
+
+  HOGLIN: 4
+  PIGLIN: 4
+  PIGLIN_BRUTE: 5
+  STRIDER: 5
+  ZOGLIN: 5
+
+xp4kill:
   BAT: 10
   BLAZE: 10
   CAVE_SPIDER: 10
