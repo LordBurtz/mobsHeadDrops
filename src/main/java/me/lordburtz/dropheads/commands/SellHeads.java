@@ -2,7 +2,9 @@ package me.lordburtz.dropheads.commands;
 
 import me.lordburtz.dropheads.DropHeads;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,13 +13,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static me.lordburtz.dropheads.DropHeads.key_mobType;
 
 public class SellHeads implements CommandExecutor, TabCompleter {
-    private DropHeads plugin;
-    private Economy econ;
+    private final DropHeads plugin;
+    private final Economy econ;
 
     public static final List<String> COMMANDS = new ArrayList<>();
     public SellHeads(DropHeads plugin, Economy economy) {

@@ -1,6 +1,7 @@
 package me.lordburtz.dropheads;
 
 import me.lordburtz.dropheads.commands.SellHeads;
+import me.lordburtz.dropheads.listeners.SpawnerPlace;
 import me.lordburtz.dropheads.util.SkullCreator;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
@@ -8,7 +9,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -16,12 +16,12 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.List;
-import java.util.ArrayList;
 
 public final class DropHeads extends JavaPlugin implements Listener {
 
@@ -33,7 +33,7 @@ public final class DropHeads extends JavaPlugin implements Listener {
     public static String prefix = "[DropHeads] ";
     public static NamespacedKey key_mobType;
     public static NamespacedKey key_playerXP;
-    public static Map<>
+
 
     public static void log(String message) {
         logger.log(Level.INFO, prefix + message);
@@ -57,6 +57,8 @@ public final class DropHeads extends JavaPlugin implements Listener {
         }
 
         new SellHeads(this, econ);
+        new SpawnerPlace(this);
+
         key_mobType = new NamespacedKey(plugin, "mobtype");
         key_playerXP = new NamespacedKey(plugin, "mobKillXp");
 
@@ -137,12 +139,6 @@ public final class DropHeads extends JavaPlugin implements Listener {
             PersistentDataContainer container = event.getEntity().getKiller().getPersistentDataContainer();
             container.set(key_playerXP, PersistentDataType.INTEGER, container.get(key_playerXP, PersistentDataType.INTEGER) + xp);
         }
-    }
-
-    @EventHandler
-    public void onPlayerFirstJoin(PlayerJoinEvent event) {
-        if (event.getPlayer().hasPlayedBefore()) return;
-        event.getPlayer().getPersistentDataContainer().set(key_playerXP, PersistentDataType.INTEGER, 0);
     }
 
     public int getXP(String mob) {

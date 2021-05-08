@@ -13,6 +13,7 @@ enableDropSkeleton: true
 enableDropWitherSkeleton: true
 enableDropZombie: true
 
+#do not change the order!
 Tiers:
   Tier1: 10
   Tier2: 20
