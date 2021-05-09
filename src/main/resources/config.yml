@@ -13,7 +13,12 @@ enableDropSkeleton: true
 enableDropWitherSkeleton: true
 enableDropZombie: true
 
+#everything about breaking Spawners
+dropSpawners: true
+needSilkTouch: false
+
 #do not change the order!
+#xp needed for the different tiers
 Tiers:
   Tier1: 10
   Tier2: 20

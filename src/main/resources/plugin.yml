@@ -11,3 +11,6 @@ commands:
   sell-heads:
     aliases: []
     description: "sell the heads in your hand"
+
+  test:
+    aliases: []

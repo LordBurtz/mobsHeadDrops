@@ -1,6 +1,7 @@
 package me.lordburtz.dropheads;
 
 import me.lordburtz.dropheads.commands.SellHeads;
+import me.lordburtz.dropheads.listeners.SpawnerBreak;
 import me.lordburtz.dropheads.listeners.SpawnerPlace;
 import me.lordburtz.dropheads.util.SkullCreator;
 import net.milkbowl.vault.economy.Economy;
@@ -58,6 +59,7 @@ public final class DropHeads extends JavaPlugin implements Listener {
 
         new SellHeads(this, econ);
         new SpawnerPlace(this);
+        new SpawnerBreak(this);
 
         key_mobType = new NamespacedKey(plugin, "mobtype");
         key_playerXP = new NamespacedKey(plugin, "mobKillXp");
