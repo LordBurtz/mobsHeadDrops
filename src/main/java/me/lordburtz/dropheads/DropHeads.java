@@ -58,8 +58,8 @@ public final class DropHeads extends JavaPlugin implements Listener {
         }
 
         new SellHeads(this, econ);
+        SpawnerBreak Break = new SpawnerBreak(this);
         new SpawnerPlace(this);
-        new SpawnerBreak(this);
 
         key_mobType = new NamespacedKey(plugin, "mobtype");
         key_playerXP = new NamespacedKey(plugin, "mobKillXp");
@@ -138,8 +138,10 @@ public final class DropHeads extends JavaPlugin implements Listener {
         } else if (custom_mob_heads.containsKey(event.getEntityType())) {
             dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName, event.getEntity().getName(), event.getEntityType().name());
             xp = getXP(event.getEntityType().name());
-            PersistentDataContainer container = event.getEntity().getKiller().getPersistentDataContainer();
-            container.set(key_playerXP, PersistentDataType.INTEGER, container.get(key_playerXP, PersistentDataType.INTEGER) + xp);
+            if (event.getEntity().getKiller() != null) {
+                PersistentDataContainer container = event.getEntity().getKiller().getPersistentDataContainer();
+                container.set(key_playerXP, PersistentDataType.INTEGER, container.get(key_playerXP, PersistentDataType.INTEGER) + xp);
+            }
         }
     }
 

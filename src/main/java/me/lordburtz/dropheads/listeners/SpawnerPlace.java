@@ -27,7 +27,7 @@ public class SpawnerPlace implements Listener {
 
     @EventHandler
     public void onPlayerFirstJoin(PlayerJoinEvent event) {
-        if (event.getPlayer().hasPlayedBefore()) return;
+        if (event.getPlayer().getPersistentDataContainer().has(key_playerXP, PersistentDataType.INTEGER)) return;
         event.getPlayer().getPersistentDataContainer().set(key_playerXP, PersistentDataType.INTEGER, 0);
     }
 
@@ -39,12 +39,12 @@ public class SpawnerPlace implements Listener {
         int level = event.getPlayer().getPersistentDataContainer().get(key_playerXP, PersistentDataType.INTEGER);
         int mob_tier = plugin.getConfig().getInt("SpawnerTiers." + type);
         int player_tier = 0;
-        Set<String> sec = plugin.getConfig().getConfigurationSection("Tiers").getKeys(false);
 
-        for (String s : Lists.reverse((List<String>) sec)) {
-            int tier = plugin.getConfig().getInt("SpawnerTiers."+ s);
+        for (int i = 5; i>=0; i--) {
+            int tier = plugin.getConfig().getInt("SpawnerTiers.Tier"+ i);
             if (level > tier) {
-                player_tier = ((List<?>) sec).indexOf(s);
+                player_tier = i;
+                event.getPlayer().sendMessage(String.valueOf(player_tier));
                 break;
             }
         }
