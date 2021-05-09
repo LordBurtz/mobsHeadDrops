@@ -75,7 +75,7 @@ public class SpawnerBreak implements Listener, CommandExecutor {
         } else {
             Location loc = event.getBlock().getLocation();
             ItemStack block = new ItemStack(Material.SPAWNER);
-            String mobtype = ((CreatureSpawner) block.getItemMeta()).getSpawnedType().name();
+            String mobtype = ((CreatureSpawner) block).getSpawnedType().name();
             block.getItemMeta().getPersistentDataContainer().set(key_spawnerType, PersistentDataType.STRING, mobtype);
             loc.getWorld().dropItem(loc, block);
             System.out.println("dropped");
