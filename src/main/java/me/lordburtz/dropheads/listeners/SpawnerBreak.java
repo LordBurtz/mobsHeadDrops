@@ -32,6 +32,7 @@ public class SpawnerBreak implements Listener, CommandExecutor {
     public SpawnerBreak(DropHeads plugin) {
         this.plugin = plugin;
         plugin.getCommand("test").setExecutor(this);
+        Bukkit.getPluginManager().registerEvents(this, plugin);
         key_spawnerType = new NamespacedKey(plugin, "spawnerType");
     }
 
