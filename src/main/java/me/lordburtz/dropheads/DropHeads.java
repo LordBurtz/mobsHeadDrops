@@ -1,12 +1,20 @@
 package me.lordburtz.dropheads;
 
+import me.lordburtz.dropheads.commands.ResetXP;
 import me.lordburtz.dropheads.commands.SellHeads;
+import me.lordburtz.dropheads.commands.ShowLevel;
+import me.lordburtz.dropheads.listeners.HeadRightClick;
 import me.lordburtz.dropheads.listeners.SpawnerBreak;
 import me.lordburtz.dropheads.listeners.SpawnerPlace;
 import me.lordburtz.dropheads.util.SkullCreator;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -60,6 +68,9 @@ public final class DropHeads extends JavaPlugin implements Listener {
         new SellHeads(this, econ);
         SpawnerBreak Break = new SpawnerBreak(this);
         new SpawnerPlace(this);
+        new ShowLevel(this);
+        new HeadRightClick(this, econ);
+        new ResetXP(this);
 
         key_mobType = new NamespacedKey(plugin, "mobtype");
         key_playerXP = new NamespacedKey(plugin, "mobKillXp");
@@ -135,14 +146,38 @@ public final class DropHeads extends JavaPlugin implements Listener {
             itemToDrop.setItemMeta(itemToDropMeta);
             event.getEntity().getWorld().dropItem(event.getEntity().getLocation(), itemToDrop);
             xp =getXP(event.getEntityType().name());
+            bossbar(event.getEntity().getKiller());
         } else if (custom_mob_heads.containsKey(event.getEntityType())) {
             dropCustomSkull(event.getEntity().getWorld(), event.getEntity().getLocation(), custom_mob_heads.get(event.getEntityType()), headItemName, event.getEntity().getName(), event.getEntityType().name());
             xp = getXP(event.getEntityType().name());
             if (event.getEntity().getKiller() != null) {
                 PersistentDataContainer container = event.getEntity().getKiller().getPersistentDataContainer();
                 container.set(key_playerXP, PersistentDataType.INTEGER, container.get(key_playerXP, PersistentDataType.INTEGER) + xp);
+                bossbar(event.getEntity().getKiller());
             }
         }
+    }
+
+    public void bossbar(Player player) {
+        int player_tier = 0;
+        int level = player.getPersistentDataContainer().get(key_playerXP, PersistentDataType.INTEGER);
+
+        for (int i = 1; i<6; i++) {
+            int tier = plugin.getConfig().getInt("Tiers.Tier"+ i);
+            if (level > tier) {
+                player_tier = i;
+            }
+        }
+        if (player_tier >= 5) return;
+        int next_tier = player_tier++;
+        int xp_next_xp = getConfig().getInt("Tiers.Tier" + next_tier);
+        BossBar xp_needed = Bukkit.createBossBar("XP needed to level up", BarColor.BLUE, BarStyle.SOLID);
+        xp_needed.setProgress(((double) xp_next_xp)/ (double) level);
+        xp_needed.addPlayer(player);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            xp_needed.setVisible(false);
+            xp_needed.removeAll();
+        }, 50);
     }
 
     public int getXP(String mob) {

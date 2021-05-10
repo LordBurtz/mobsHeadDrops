@@ -57,14 +57,10 @@ public class SpawnerBreak implements Listener, CommandExecutor {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             Block block = loc.getBlock();
             CreatureSpawner spawner = (CreatureSpawner) block.getState();
-            spawner.setSpawnedType(EntityType.COW);
-            System.out.println("EnittyType: "  +EntityType.valueOf(type));
-            System.out.println( "Spawned type1: " + spawner.getSpawnedType().toString());
+            spawner.setSpawnedType(EntityType.valueOf(type));
             spawner.update();
-            System.out.println( "Spawned type2: " + spawner.getSpawnedType().toString());
         }, 10);
     }
-
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {

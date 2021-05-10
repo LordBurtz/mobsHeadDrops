@@ -15,7 +15,9 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
 import java.util.Set;
 
+import static me.lordburtz.dropheads.DropHeads.key_mobType;
 import static me.lordburtz.dropheads.DropHeads.key_playerXP;
+import static me.lordburtz.dropheads.listeners.SpawnerBreak.key_spawnerType;
 
 public class SpawnerPlace implements Listener {
     private final DropHeads plugin;
@@ -31,27 +33,29 @@ public class SpawnerPlace implements Listener {
         event.getPlayer().getPersistentDataContainer().set(key_playerXP, PersistentDataType.INTEGER, 0);
     }
 
-    @EventHandler (priority = EventPriority.HIGHEST)
+    @EventHandler (priority = EventPriority.HIGH)
     public void onSpawnerPlace(BlockPlaceEvent event) {
         if (!event.getBlockPlaced().getType().equals(Material.SPAWNER)) return;
         CreatureSpawner spawner = (CreatureSpawner) event.getBlockPlaced().getState();
-        String type = spawner.getSpawnedType().name();
+        String type = event.getItemInHand().getItemMeta().getPersistentDataContainer().get(key_spawnerType, PersistentDataType.STRING);
         int level = event.getPlayer().getPersistentDataContainer().get(key_playerXP, PersistentDataType.INTEGER);
+        System.out.println(event.getItemInHand().getItemMeta().getPersistentDataContainer().getKeys());
         int mob_tier = plugin.getConfig().getInt("SpawnerTiers." + type);
         int player_tier = 0;
 
-        for (int i = 5; i>=0; i--) {
-            int tier = plugin.getConfig().getInt("SpawnerTiers.Tier"+ i);
+
+        for (int i = 1; i<6; i++) {
+            int tier = plugin.getConfig().getInt("Tiers.Tier"+ i);
             if (level > tier) {
                 player_tier = i;
-                event.getPlayer().sendMessage(String.valueOf(player_tier));
-                break;
             }
         }
 
         if (player_tier >= mob_tier) {
             return;
         } else {
+            //TODO: add better msg / config support?
+            event.getPlayer().sendMessage("your MobLevel is insufficient");
             event.setCancelled(true);
         }
     }

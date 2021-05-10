@@ -14,3 +14,9 @@ commands:
 
   test:
     aliases: []
+
+  level:
+    aliases: []
+
+  reset-xp:
+    aliases: []
