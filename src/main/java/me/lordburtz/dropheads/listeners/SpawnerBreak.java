@@ -23,6 +23,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.nio.Buffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpawnerBreak implements Listener, CommandExecutor {
     private DropHeads plugin;
@@ -49,9 +51,18 @@ public class SpawnerBreak implements Listener, CommandExecutor {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
         if (!event.getBlockPlaced().getType().equals(Material.SPAWNER)) return;
+        if (!event.getItemInHand().hasItemMeta()) return;
         String type = event.getItemInHand().getItemMeta().getPersistentDataContainer().get(key_spawnerType, PersistentDataType.STRING);
-        Block block = event.getBlockPlaced();
-        ((CreatureSpawner) block).setSpawnedType(EntityType.valueOf(type));
+        Location loc = event.getBlock().getLocation();
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Block block = loc.getBlock();
+            CreatureSpawner spawner = (CreatureSpawner) block.getState();
+            spawner.setSpawnedType(EntityType.COW);
+            System.out.println("EnittyType: "  +EntityType.valueOf(type));
+            System.out.println( "Spawned type1: " + spawner.getSpawnedType().toString());
+            spawner.update();
+            System.out.println( "Spawned type2: " + spawner.getSpawnedType().toString());
+        }, 10);
     }
 
 
@@ -59,26 +70,35 @@ public class SpawnerBreak implements Listener, CommandExecutor {
     public void onBlockBreak(BlockBreakEvent event) {
         if (!event.getBlock().getType().equals(Material.SPAWNER)) return;
         if (!plugin.getConfig().getBoolean("dropSpawners")) return;
-        System.out.println("spawner recognized");
         Player player = event.getPlayer();
         if (plugin.getConfig().getBoolean("needSilkTouch")) {
             if (player.getInventory().getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH)) {
                 Location loc = event.getBlock().getLocation();
                 ItemStack block = new ItemStack(Material.SPAWNER);
-                String mobtype = ((CreatureSpawner) block.getItemMeta()).getSpawnedType().name();
-                block.getItemMeta().getPersistentDataContainer().set(key_spawnerType, PersistentDataType.STRING, mobtype);
+                String mobtype = ((CreatureSpawner) event.getBlock().getState()).getSpawnedType().name();
+                ItemMeta meta = block.getItemMeta();
+                meta.getPersistentDataContainer().set(key_spawnerType, PersistentDataType.STRING, mobtype);
+                List<String> lore = new ArrayList<>();
+                lore.add("MobSpawner");
+                meta.setDisplayName(String.format("%s's Spawner", mobtype));
+                meta.setLore(lore);
+                block.setItemMeta(meta);
                 loc.getWorld().dropItem(loc, block);
             } else {
-                System.out.println("silk return");
                 return;
             }
         } else {
             Location loc = event.getBlock().getLocation();
             ItemStack block = new ItemStack(Material.SPAWNER);
-            String mobtype = ((CreatureSpawner) block).getSpawnedType().name();
-            block.getItemMeta().getPersistentDataContainer().set(key_spawnerType, PersistentDataType.STRING, mobtype);
+            String mobtype = ((CreatureSpawner) event.getBlock().getState()).getSpawnedType().name();
+            ItemMeta meta = block.getItemMeta();
+            meta.getPersistentDataContainer().set(key_spawnerType, PersistentDataType.STRING, mobtype);
+            List<String> lore = new ArrayList<>();
+            lore.add("MobSpawner");
+            meta.setLore(lore);
+            meta.setDisplayName(String.format("%s's Spawner", mobtype));
+            block.setItemMeta(meta);
             loc.getWorld().dropItem(loc, block);
-            System.out.println("dropped");
         }
     }
 }
