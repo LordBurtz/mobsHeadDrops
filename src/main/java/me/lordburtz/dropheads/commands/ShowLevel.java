@@ -23,7 +23,7 @@ public class ShowLevel implements CommandExecutor {
         if (!(commandSender instanceof Player)) return true;
         Player player = (Player) commandSender;
         int level = player.getPersistentDataContainer().get(key_playerXP, PersistentDataType.INTEGER);
-        player.sendMessage("Your Level is: " + level);
+        player.sendMessage("Your current Level is: " + level);
         int player_tier = 0;
 
         for (int i = 1; i<6; i++) {
@@ -32,7 +32,8 @@ public class ShowLevel implements CommandExecutor {
                 player_tier = i;
             }
         }
-        player.sendMessage("Your Tier is: " + player_tier);
+
+        player.sendMessage("Your current Tier is: " + player_tier);
         return true;
     }
 }

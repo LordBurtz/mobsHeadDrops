@@ -3,6 +3,7 @@ package me.lordburtz.dropheads.listeners;
 import com.google.common.collect.Lists;
 import me.lordburtz.dropheads.DropHeads;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.event.EventHandler;
@@ -15,8 +16,7 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.List;
 import java.util.Set;
 
-import static me.lordburtz.dropheads.DropHeads.key_mobType;
-import static me.lordburtz.dropheads.DropHeads.key_playerXP;
+import static me.lordburtz.dropheads.DropHeads.*;
 import static me.lordburtz.dropheads.listeners.SpawnerBreak.key_spawnerType;
 
 public class SpawnerPlace implements Listener {
@@ -54,8 +54,12 @@ public class SpawnerPlace implements Listener {
         if (player_tier >= mob_tier) {
             return;
         } else {
-            //TODO: add better msg / config support?
-            event.getPlayer().sendMessage("your MobLevel is insufficient");
+            String msg = plugin.getConfig().getString("insufficient_level");
+            if (msg == null) {
+                msg = "your MobLevel is insufficient";
+                log(ChatColor.RED + "insufficient_level msg not set in the config.yml", true);
+            }
+            event.getPlayer().sendMessage(ChatColor.RED + msg);
             event.setCancelled(true);
         }
     }

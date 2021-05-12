@@ -3,7 +3,8 @@
 # Only Drop Head when Killed By Player
 mustBePlayerKill: false
 
-#set here your custom message
+#custom messages:
+insufficient_level: "your MobLevel is insufficient"
 help-msg: "kill mobs to get heads.. sell your heads with /sell-heads"
 
 # Enable/Disable Drops of Non-Custom Heads from the Vanilla Game
@@ -22,9 +23,9 @@ needSilkTouch: false
 Tiers:
   Tier1: 10
   Tier2: 20
-  Tier3: 30
-  Tier4: 40
-  Tier5: 50
+  Tier3: 40
+  Tier4: 80
+  Tier5: 160
 
 # Base64 String Values for Custom Head Skins, defaults mostly from https://minecraft-heads.com/custom-heads
 # If an EntityType is invalid, the entry is ignored. This allows for widened version compatibility with a single plugin jar.
